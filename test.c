@@ -9,14 +9,18 @@
 */
 
 int check_cmd_line(int, char *[]);
+int print_valid_params(void);
 
 int main(int argc, char *argv[])
 {
-
 	int i;
 
 	printf(NL);
-	printf("Результат chek_cmd_line: %d\n", check_cmd_line(argc, argv));
+	if (check_cmd_line(argc, argv) < 0)
+	{
+		print_valid_params();
+		return -1;
+	}
 	printf(NL);
 
 	return 0;
@@ -29,6 +33,7 @@ int check_cmd_line(int argc, char *argv[])
 {
 	int result = 0;
 	int i = 0;
+	char c;
 
 	/* Проверяем количество параметров 
 	 */
@@ -38,9 +43,20 @@ int check_cmd_line(int argc, char *argv[])
 	/* Проверяем первый параметр (имя файла) на правильность символов
 	 */
 
-	while(argv[1][i] != '\0')
-		printf("%d. %d %d\n", i++, argv[1][i], sizeof(argv[1][i]));
-	
+	for(i = 0; (c = argv[1][i]) != '\0'; i++)
+	{
+		printf("-***- %d\n", c);
+		if (c <= '0' || c >= 'Z')
+			return -2;
+	}
 
 	return result;
+}
+
+int print_valid_params(void)
+{
+	printf(NL);
+	printf("Usage: test file_name\n");
+	printf(NL);
+	return 0;
 }
